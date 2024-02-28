@@ -41,9 +41,11 @@ const Post = mongoose.model('Post', PostSchema);
 
 // Routes
 app.get('/', (req, res) => {
-    Post.find().populate('author').exec((err, posts) => {
-        if (err) throw err;
+    Post.find().populate('author').exec().then(posts => {
         res.render('index', { posts: posts });
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send('An error occurred');
     });
 });
 
